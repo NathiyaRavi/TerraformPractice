@@ -15,4 +15,5 @@ Variables:
     if we no mention -var-file, it will take default file
 
 5. we can provide var value in cmd inline itself, it will take waitage than others
+   
     terraform plan -var="instance_type=t3.micro"
