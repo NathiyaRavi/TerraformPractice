@@ -1,7 +1,12 @@
+
 terraform {
-  backend "s3" {
-    bucket = "terraform-test-nathiya"
-    key    = "terraform.tfstate"
-    region = "ap-south-1"
-  }
+   backend "s3" {
+     encrypt        = true
+     bucket         = "terraform-test-nathiya"
+     dynamodb_table = "terraform-state-lock-dynamo"
+     key            = "terraform.tfstate"
+     region         = "ap-south-1"
+   }
+
+   ## ...
 }
