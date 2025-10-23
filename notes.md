@@ -15,6 +15,7 @@ Variables:
     if we no mention -var-file, it will take default file
 
 5. we can provide var value in cmd inline itself, it will take waitage than others
+
     terraform plan -var="instance_type=t3.micro"
 
 
@@ -31,3 +32,7 @@ SOLUTION: Remote Backend using S3,
           Drawback: IF 2 devs are working at the same time, state lock and merge conflicts will occur
 
           SOLUTION:: DYNAMO DB ( State locking provision )
+
+   
+
+
