@@ -16,3 +16,18 @@ Variables:
 
 5. we can provide var value in cmd inline itself, it will take waitage than others
     terraform plan -var="instance_type=t3.micro"
+
+
+STATE FILE:
+
+1. IF 2 Dev have same state file by sharing manually
+    1. conflicts will occur
+    2. overwrite changes
+
+2. IF diff state files means on the same task
+    1. duplicate resources will be created
+SOLUTION: Remote Backend using S3,
+          ---- git pull is always must to get latest code
+          Drawback: IF 2 devs are working at the same time, state lock and merge conflicts will occur
+
+          SOLUTION:: DYNAMO DB ( State locking provision )
