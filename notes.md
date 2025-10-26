@@ -33,6 +33,13 @@ SOLUTION: Remote Backend using S3,
 
           SOLUTION:: DYNAMO DB ( State locking provision )
 
+IMPORT:
+--------
+
+1. Control the resources in terraform which has been created manually 
+    1. create empty resource block and run the command to create state file
+        terraform import aws_instance.import-test i-0afe7e2aad1d1e4c5
+    2. refer the state file and add information into resource block, do it until you get the 0 chnages in the plan
    
 
 
