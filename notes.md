@@ -42,4 +42,10 @@ IMPORT:
     2. refer the state file and add information into resource block, do it until you get the 0 chnages in the plan
    
 
+TARGET:
+    To run the terraform command only for the particular resource
+    
+    terraform plan -target="aws_s3_bucket.test" -target="aws_s3_bucket.test1"
+    terraform apply -target="aws_s3_bucket.test" -target="aws_s3_bucket.test1"
+
 
