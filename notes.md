@@ -48,4 +48,11 @@ TARGET:
     terraform plan -target="aws_s3_bucket.test" -target="aws_s3_bucket.test1"
     terraform apply -target="aws_s3_bucket.test" -target="aws_s3_bucket.test1"
 
+PROVISIONING:
+-------------
+ 1. Provide instalaation command inside resource itself
+ 2. It will run only after resource creation
+ 3. If we modify any code in the command, it is destroy and recreate the resource each time
+ 4. No information captured in tfstate
+
 
