@@ -55,4 +55,15 @@ PROVISIONING:
  3. If we modify any code in the command, it is destroy and recreate the resource each time
  4. No information captured in tfstate
 
+ COUNT:
+ -------
+
+ 1. If we provide count=2 it will create 2 resources
+ 2. If we try to use it in the list type variable and try to use the index means, like
+    [ "dev", "test", "prod" ]
+    It will create 3 servers
+    If I remove "test" in between, now the index size is 2, so it will remove it from end only.
+
+SOLUTION: FOR-EACH with set, now we can use each.value and it will iterate properly
+
 
