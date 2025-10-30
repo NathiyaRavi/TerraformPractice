@@ -134,7 +134,19 @@ resource "aws_instance" "dev_private" {
   subnet_id = aws_subnet.dev_private.id
   security_groups = [ aws_security_group.dev.id ]
   tags = {
-    Name = "dev-private-instance"
+    Name = "dev-private-instance_frontend"
+  }
+}
+
+# Private Ec2 creation
+resource "aws_instance" "dev_private" {
+  ami = "ami-06fa3f12191aa3337"
+  instance_type = "t3.micro"
+  key_name = "dev_key"
+  subnet_id = aws_subnet.dev_private.id
+  security_groups = [ aws_security_group.dev.id ]
+  tags = {
+    Name = "dev-private-instance_backend"
   }
 }
 

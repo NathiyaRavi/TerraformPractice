@@ -66,4 +66,12 @@ PROVISIONING:
 
 SOLUTION: FOR-EACH with set, now we can use each.value and it will iterate properly
 
+WORKSPACE:
+---------
+
+1. Creating and maintaing the resources on the respective workspace
+2. we can maintain the different worspace with the same resource file also
+
+But it will be difficult to maintain the different state with the same file
+
 
