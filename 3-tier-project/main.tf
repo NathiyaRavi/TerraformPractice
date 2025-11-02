@@ -24,6 +24,15 @@ resource "aws_subnet" "dev_pub" {
   }
 }
 
+resource "aws_subnet" "dev_pub-1b" {
+  vpc_id = aws_vpc.dev.id
+  cidr_block = "10.0.3.0/24"
+  availability_zone = "ap-south-1b"
+  tags = {
+    Name = "Dev-Subnet-pub-1b"
+  }
+}
+
 # Private subnet creation
 resource "aws_subnet" "dev_private" {
   vpc_id = aws_vpc.dev.id
@@ -32,6 +41,17 @@ resource "aws_subnet" "dev_private" {
   
   tags = {
     Name = "Dev-Subnet-private"
+  }
+}
+
+# Private subnet creation
+resource "aws_subnet" "dev_private-1b" {
+  vpc_id = aws_vpc.dev.id
+  cidr_block = "10.0.2.0/24"
+  availability_zone = "ap-south-1b"
+  
+  tags = {
+    Name = "Dev-Subnet-private-1b"
   }
 }
 
@@ -99,6 +119,25 @@ resource "aws_security_group" "dev" {
         from_port = 22
         to_port = 22
     }
+    ingress {
+        cidr_blocks = [ "0.0.0.0/0" ]
+        protocol = "tcp"
+        from_port = 443
+        to_port = 443
+    }
+    ingress {
+        cidr_blocks = [ "0.0.0.0/0" ]
+        protocol = "tcp"
+        from_port = 3306
+        to_port = 3306
+    }
+    ingress {
+        cidr_blocks = [ "0.0.0.0/0" ]
+        protocol = "tcp"
+        from_port = 80
+        to_port = 80
+    }
+    
 
     egress {
        cidr_blocks = [ "0.0.0.0/0" ]
@@ -115,7 +154,7 @@ resource "aws_security_group" "dev" {
 
 # Public Ec2 creation
 resource "aws_instance" "dev_pub" {
-  ami = "ami-06fa3f12191aa3337"
+  ami = "ami-02d26659fd82cf299"
   instance_type = "t3.micro"
   key_name = "dev_key"
   subnet_id = aws_subnet.dev_pub.id
@@ -124,11 +163,14 @@ resource "aws_instance" "dev_pub" {
   tags = {
     Name = "dev-pub-instance"
   }
+  lifecycle {
+    ignore_changes = [ vpc_security_group_ids, security_groups ]
+  }
 }
 
 # Private Ec2 creation
-resource "aws_instance" "dev_private" {
-  ami = "ami-06fa3f12191aa3337"
+resource "aws_instance" "dev_private_fe" {
+  ami = "ami-02d26659fd82cf299"
   instance_type = "t3.micro"
   key_name = "dev_key"
   subnet_id = aws_subnet.dev_private.id
@@ -136,11 +178,14 @@ resource "aws_instance" "dev_private" {
   tags = {
     Name = "dev-private-instance_frontend"
   }
+  lifecycle {
+    ignore_changes = [ vpc_security_group_ids, security_groups ]
+  }
 }
 
 # Private Ec2 creation
-resource "aws_instance" "dev_private" {
-  ami = "ami-06fa3f12191aa3337"
+resource "aws_instance" "dev_private_be" {
+  ami = "ami-02d26659fd82cf299"
   instance_type = "t3.micro"
   key_name = "dev_key"
   subnet_id = aws_subnet.dev_private.id
@@ -148,6 +193,33 @@ resource "aws_instance" "dev_private" {
   tags = {
     Name = "dev-private-instance_backend"
   }
+  lifecycle {
+    ignore_changes = [ vpc_security_group_ids, security_groups ]
+  }
 }
 
+#AMI for front end server
+ 
+ #You already have an EC2 instance created manually or via Terraform
+data "aws_instance" "frontend" {
+  instance_id = aws_instance.dev_private_fe.id
+}
+
+# Create AMI from that instance
+resource "aws_ami_from_instance" "frontend_ami" {
+  name               = "frontend-ami-v1"
+  source_instance_id = data.aws_instance.frontend.id
+  description        = "AMI with pre-installed frontend app"
+}
+
+#AMI for backend end server
+
+data "aws_instance" "backend" {
+  instance_id = aws_instance.dev_private_be.id
+}
+resource "aws_ami_from_instance" "backend_ami" {
+  name               = "backend-ami-v1"
+  source_instance_id = data.aws_instance.backend.id
+  description        = "AMI with pre-installed backend app"
+}
 
